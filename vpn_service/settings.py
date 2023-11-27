@@ -20,10 +20,9 @@ env = Env()
 env.read_env(BASE_DIR / '.env')
 
 
-SECRET_KEY = 'django-insecure-qoz9@g3vih9qziham8gb2==y(3@bba@5ijsz(@0aq6u=2_g+l5'
+SECRET_KEY = env('SECRET_KEY')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env('DEBUG', cast=bool, default=False)
 
 ALLOWED_HOSTS = []
 
@@ -76,8 +75,15 @@ WSGI_APPLICATION = 'vpn_service.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'HOST': env('DATABASE_HOST'),
+        'PORT': env('DATABASE_PORT'),
+        'NAME': env('DATABASE_NAME'),
+        'USER': env('DATABASE_USER'),
+        'PASSWORD': env('DATABASE_PASSWORD'),
+        'OPTIONS': {
+            'connect_timeout': 5,
+        }
     }
 }
 
@@ -106,7 +112,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Kiev'
 
 USE_I18N = True
 
