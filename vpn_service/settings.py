@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 
+from django.urls import reverse_lazy
 from environ import Env
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -39,6 +40,7 @@ INSTALLED_APPS = [
     "crispy_forms",
     "crispy_bootstrap5",
     "users",
+    "vpn",
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
@@ -113,6 +115,9 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTH_USER_MODEL = "users.User"
+
+LOGIN_URL = reverse_lazy("users:login")
+LOGOUT_URL = reverse_lazy("users:logout")
 
 
 # Internationalization
