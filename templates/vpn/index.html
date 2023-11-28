@@ -13,7 +13,7 @@
                 <div class="col-8">
                   <div class="numbers">
                     <h5 class="font-weight-bolder mb-0">
-                      <a class="nav-link {% if 'manager:worker-detail' in segment %} active {% endif %} " href="{% url 'users:logout' %}"
+                      <a class="nav-link {% if 'users:detail' in segment %} active {% endif %} " href="{% url 'users:detail' pk=user.id%}"
                         <span class="nav-link-text ms-1">My profile</span>
                       </a>
                     </h5>

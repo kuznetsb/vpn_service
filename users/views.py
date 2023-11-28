@@ -1,8 +1,9 @@
-from django.contrib.auth import authenticate, login
-from django.urls import reverse_lazy
+from django.contrib.auth import authenticate, login, get_user_model
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy, reverse
 from django.views import generic
 
-from users.forms import RegisterForm
+from users.forms import RegisterForm, UserUpdateForm
 
 
 class UserCreateView(generic.CreateView):
@@ -21,3 +22,17 @@ class UserCreateView(generic.CreateView):
             login(self.request, user)
 
         return response
+
+
+class UserDetailView(LoginRequiredMixin, generic.DetailView):
+    model = get_user_model()
+    queryset = get_user_model().objects.all()
+
+
+class UserUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = get_user_model()
+    form_class = UserUpdateForm
+
+    def get_success_url(self):
+        pk = self.kwargs["pk"]
+        return reverse("users:detail", kwargs={"pk": pk})
