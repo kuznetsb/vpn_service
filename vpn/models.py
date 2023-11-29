@@ -19,13 +19,11 @@ class Statistics(models.Model):
         Site, on_delete=models.CASCADE, related_name="statistics"
     )
     transitions_number = models.PositiveIntegerField(default=0)
-    data_volume_upload = models.FloatField(
-        help_text="Обʼєм даних який було відправлено (в МБ)",
-        default=0.0,
-        validators=[MinValueValidator(0.0)],
+    data_volume_upload = models.PositiveBigIntegerField(
+        help_text="Обʼєм даних який було відправлено (в байтах)",
+        default=0,
     )
-    data_volume_downloaded = models.FloatField(
-        help_text="Обʼєм даних який було завантажено (в МБ)",
-        default=0.0,
-        validators=[MinValueValidator(0.0)],
+    data_volume_downloaded = models.PositiveBigIntegerField(
+        help_text="Обʼєм даних який було завантажено (в байтах)",
+        default=0,
     )
