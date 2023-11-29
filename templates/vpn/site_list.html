@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% load crispy_forms_filters %}
+{% load static %}
+
+{% block content %}
+
+    <div class="container-fluid py-4">
+      <div class="row">
+        <form action="" method="get" class="d-flex flex-row align-items-center flex-wrap">
+          {{ search_form|crispy }}
+          <input type="submit" value="🔍" class="btn bg-gradient-white">
+        </form>
+      </div>
+
+      <div class="row">
+        <div class="col-12">
+          <div class="card mb-4">
+            {% if site_list %}
+              <div class="card-header pb-0">
+                <div class="row">
+                  <div class="col-6 d-flex align-items-center">
+                    <h6 class="mb-0">List of all sites</h6>
+                  </div>
+                  <div class="col-6 text-end">
+                    <a class="btn bg-gradient-dark mb-0" href="{% url 'vpn:site-create' %}"><i class="fas fa-plus"></i>&nbsp;&nbsp;New Site</a>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body px-0 pt-0 pb-2">
+                <div class="table-responsive p-0">
+                  <table class="table align-items-center justify-content-center mb-0">
+                    <thead>
+                      <tr>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Url</th>
+                        <th class="text-secondary opacity-7"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for site in site_list %}
+                        <tr>
+                          <td>
+                            <div class="d-flex px-2">
+                              <div class="my-auto">
+                                <h6 class="mb-0 text-sm"><a href="{% url 'vpn:site-detail' pk=site.id%}">{{ site.name }}</a></h6>
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                            <p class="text-sm font-weight-bold mb-0"><a href="{{ site.url }}">{{ site.url }}</a></p>
+                          </td>
+                          <td>
+                            <a class="btn btn-link text-dark text-gradient px-3 mb-0" href="{% url 'vpn:site-proxy' url=site.url %}">Go to Website</a>
+                          </td>
+                          <td>
+                            <a class="btn btn-link text-danger text-gradient px-3 mb-0" href="{% url 'vpn:site-delete' pk=site.id %}"><i class="far fa-trash-alt me-2"></i>Delete</a>
+                          </td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            {% else %}
+              <div class="card-header pb-0">
+                <div class="row">
+                  <div class="col-6 d-flex align-items-center">
+                    <h6 class="mb-0">No sites yet</h6>
+                  </div>
+                  <div class="col-6 text-end">
+                    <a class="btn bg-gradient-dark mb-0" href="{% url 'vpn:site-create' %}"><i class="fas fa-plus"></i>&nbsp;&nbsp;New Site</a>
+                  </div>
+                </div>
+                <div class="card-body px-0 pt-0 pb-2"></div>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+    </div>
+{% endblock %}
