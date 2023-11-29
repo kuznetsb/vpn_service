@@ -115,7 +115,4 @@ class ProxyView(generic.View):
                 refactored_response_text, content_type=response.headers["content-type"]
             )
 
-        # Handle other status codes as needed
-        return HttpResponse(
-            status=response.status_code,
-        )
+        return render(request, "vpn/proxy_error.html")
