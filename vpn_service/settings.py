@@ -28,6 +28,14 @@ DEBUG = env("DEBUG", cast=bool, default=False)
 ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 
 
+PROTOCOL = env("PROTOCOL")
+
+DOMAIN = env("DOMAIN")
+
+SITE_URL = f"{PROTOCOL}://{DOMAIN}"
+DJANGO_PORT = 8000
+
+
 # Application definition
 
 INSTALLED_APPS = [
