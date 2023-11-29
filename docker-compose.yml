@@ -4,8 +4,6 @@ services:
   app:
     build:
       context: .
-    ports:
-      - "8000:8000"
     volumes:
       - ./:/app
     command: >
@@ -16,10 +14,14 @@ services:
       - .env
     depends_on:
       - db
+    ports:
+      - ${APP_BIND:-127.0.0.1:8000}:8000
+    expose:
+      - 8000
 
   db:
     image: postgres:15-alpine
     ports:
-      - "5432:5432"
+      - ${POSTGRES_BIND:-127.0.0.1:5432}:5432
     env_file:
       - .env
