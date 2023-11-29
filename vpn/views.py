@@ -85,7 +85,7 @@ class SiteDeleteView(LoginRequiredMixin, UserSitesMixin, generic.DeleteView):
     success_url = reverse_lazy("vpn:site-list")
 
 
-class ProxyView(generic.View):
+class ProxyView(LoginRequiredMixin, generic.View):
     def get(self, request, url, *args, **kwargs):
         decoded_url = unquote(url)
         response = requests.get(decoded_url)

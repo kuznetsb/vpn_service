@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 PROTOCOL = env("PROTOCOL")
 
 DOMAIN = env("DOMAIN")
+SESSION_COOKIE_DOMAIN = DOMAIN
 
 SITE_URL = f"{PROTOCOL}://{DOMAIN}"
 DJANGO_PORT = 8000
@@ -92,11 +93,10 @@ WSGI_APPLICATION = "vpn_service.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "HOST": env("DATABASE_HOST"),
-        "PORT": env("DATABASE_PORT"),
-        "NAME": env("DATABASE_NAME"),
-        "USER": env("DATABASE_USER"),
-        "PASSWORD": env("DATABASE_PASSWORD"),
+        "HOST": env("POSTGRES_HOST"),
+        "NAME": env("POSTGRES_DB"),
+        "USER": env("POSTGRES_USER"),
+        "PASSWORD": env("POSTGRES_PASSWORD"),
         "OPTIONS": {
             "connect_timeout": 5,
         },

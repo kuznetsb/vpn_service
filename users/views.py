@@ -10,7 +10,7 @@ from vpn.models import Statistics
 class UserCreateView(generic.CreateView):
     form_class = RegisterForm
     template_name = "registration/register.html"
-    success_url = reverse_lazy("vpn:index")
+    success_url = reverse_lazy("index")
 
     def form_valid(self, form):
         response = super().form_valid(form)
