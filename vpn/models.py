@@ -5,7 +5,7 @@ from django.db import models
 
 class Site(models.Model):
     name = models.CharField(max_length=255)
-    url = models.URLField(max_length=255, unique=True)
+    url = models.URLField(max_length=255)
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="sites"
     )
