@@ -1,8 +1,7 @@
 from django import forms
-from django.conf import settings
 from django.core.exceptions import ValidationError
 
-from vpn.models import Site
+from vpn.models import Site, Statistics
 
 
 class SiteSearchForm(forms.Form):
@@ -31,6 +30,15 @@ class SiteCreateForm(forms.ModelForm):
 
         self.cleaned_data["url"] = unified_url
         return self.cleaned_data
+
+    def save(self, commit=True):
+        self.instance = super().save(commit=False)
+        self.instance.author = self.request.user
+        self.instance.save()
+
+        Statistics.objects.create(site=self.instance)
+
+        return self.instance
 
 
 class SiteNameUpdateForm(forms.ModelForm):

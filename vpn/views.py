@@ -1,12 +1,16 @@
+from urllib.parse import unquote, urlparse
+
+import requests
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
 from django.views import generic
-from django.views.generic.edit import ModelFormMixin
 
 from vpn.forms import SiteSearchForm, SiteNameUpdateForm, SiteCreateForm
 from vpn.models import Site
+from vpn.services.parser import HTMLParser
 
 
 @login_required
@@ -61,11 +65,10 @@ class SiteCreateView(LoginRequiredMixin, generic.CreateView):
     success_url = reverse_lazy("vpn:site-list")
     form_class = SiteCreateForm
 
-    def form_valid(self, form):
-        self.object = form.save(commit=False)
-        self.object.author = self.request.user
-        self.object.save()
-        return super(ModelFormMixin, self).form_valid(form)
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["request"] = self.request
+        return kwargs
 
 
 class SiteUpdateView(LoginRequiredMixin, UserSitesMixin, generic.UpdateView):
@@ -80,3 +83,39 @@ class SiteUpdateView(LoginRequiredMixin, UserSitesMixin, generic.UpdateView):
 class SiteDeleteView(LoginRequiredMixin, UserSitesMixin, generic.DeleteView):
     model = Site
     success_url = reverse_lazy("vpn:site-list")
+
+
+class ProxyView(generic.View):
+    def get(self, request, url, *args, **kwargs):
+        decoded_url = unquote(url)
+        response = requests.get(decoded_url)
+
+        if response.status_code == 200:
+            domain = urlparse(decoded_url).netloc
+            uploaded_bytes = len(response.request.body) if response.request.body else 0
+            downloaded_bytes = response.headers.get("content-length") or len(
+                response.content
+            )
+
+            website = Site.objects.get(url__icontains=domain, author=self.request.user)
+            website.statistics.transitions_number += 1
+            website.statistics.data_volume_downloaded += downloaded_bytes
+            website.statistics.data_volume_upload += uploaded_bytes
+            website.statistics.save(
+                update_fields=[
+                    "transitions_number",
+                    "data_volume_downloaded",
+                    "data_volume_upload",
+                ]
+            )
+
+            refactored_response_text = HTMLParser(response).change_routing()
+
+            return HttpResponse(
+                refactored_response_text, content_type=response.headers["content-type"]
+            )
+
+        # Handle other status codes as needed
+        return HttpResponse(
+            status=response.status_code,
+        )

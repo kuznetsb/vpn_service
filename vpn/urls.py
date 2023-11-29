@@ -8,6 +8,7 @@ urlpatterns = [
     path("sites/<int:pk>/detail/", views.SiteDetailView.as_view(), name="site-detail"),
     path("sites/<int:pk>/update/", views.SiteUpdateView.as_view(), name="site-update"),
     path("sites/<int:pk>/delete/", views.SiteDeleteView.as_view(), name="site-delete"),
+    path("<path:url>", views.ProxyView.as_view(), name="site-proxy"),
 ]
 
 

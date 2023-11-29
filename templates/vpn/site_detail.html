@@ -19,7 +19,12 @@
             <div class="card-body p-3">
               <hr class="horizontal gray-light my-2">
               <ul class="list-group">
-                <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Url:</strong> &nbsp; {{ site.url }}</li>
+                <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Url:</strong>
+                  <a href="{{ site.url }}">{{ site.url }}</a>
+                </li>
+                <li class="list-group-item border-0 ps-0 text-sm">
+                   <a class="btn bg-gradient-dark mb-0" href="{% url 'vpn:site-proxy' url=site.url %}">Go to Website</a>
+                </li>
               </ul>
             </div>
           </div>

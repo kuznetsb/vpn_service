@@ -47,7 +47,10 @@
                             </div>
                           </td>
                           <td>
-                            <p class="text-sm font-weight-bold mb-0">{{ site.url }}</p>
+                            <p class="text-sm font-weight-bold mb-0"><a href="{{ site.url }}">{{ site.url }}</a></p>
+                          </td>
+                          <td>
+                            <a class="btn btn-link text-dark text-gradient px-3 mb-0" href="{% url 'vpn:site-proxy' url=site.url %}">Go to Website</a>
                           </td>
                           <td>
                             <a class="btn btn-link text-danger text-gradient px-3 mb-0" href="{% url 'vpn:site-delete' pk=site.id %}"><i class="far fa-trash-alt me-2"></i>Delete</a>
