@@ -4,6 +4,7 @@ from django.urls import reverse_lazy, reverse
 from django.views import generic
 
 from users.forms import RegisterForm, UserUpdateForm
+from vpn.models import Statistics
 
 
 class UserCreateView(generic.CreateView):
@@ -27,6 +28,14 @@ class UserCreateView(generic.CreateView):
 class UserDetailView(LoginRequiredMixin, generic.DetailView):
     model = get_user_model()
     queryset = get_user_model().objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_statistics = Statistics.objects.select_related("site__author").filter(
+            site__author=self.request.user
+        )
+        context["sites_stats"] = user_statistics
+        return context
 
 
 class UserUpdateView(LoginRequiredMixin, generic.UpdateView):
